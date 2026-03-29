@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-cyber-bg: #050505;
+  --color-cyber-card: #0a0a0a;
+  --color-cyber-blue: #00d2ff;
+  --color-cyber-green: #39ff14;
+  --color-cyber-purple: #bc13fe;
+  --color-cyber-red: #ff0000;
+}
+
+@layer base {
+  body {
+    @apply bg-cyber-bg text-slate-300 font-sans selection:bg-cyber-red/30 selection:text-white;
+    position: relative;
+  }
+  
+  body::after {
+    content: " ";
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 100;
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-mono text-white tracking-tight;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/5 backdrop-blur-md border border-white/10;
+  }
+  
+  .glow-blue {
+    box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
+  }
+  
+  .glow-red {
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+  }
+  
+  .text-glow-red {
+    text-shadow: 0 0 8px rgba(255, 0, 0, 0.5);
+  }
+
+  .glitch {
+    position: relative;
+  }
+
+  .glitch::before,
+  .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .glitch::before {
+    left: 2px;
+    text-shadow: -2px 0 #ff00c1;
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim 5s infinite linear alternate-reverse;
+  }
+
+  .glitch::after {
+    left: -2px;
+    text-shadow: -2px 0 #00fff9, 2px 2px #ff00c1;
+    animation: glitch-anim2 1s infinite linear alternate-reverse;
+  }
+}
+
+@keyframes glitch-anim {
+  0% { clip: rect(31px, 9999px, 94px, 0); }
+  20% { clip: rect(62px, 9999px, 42px, 0); }
+  40% { clip: rect(16px, 9999px, 78px, 0); }
+  60% { clip: rect(1px, 9999px, 13px, 0); }
+  80% { clip: rect(53px, 9999px, 86px, 0); }
+  100% { clip: rect(91px, 9999px, 98px, 0); }
+}
+
+@keyframes glitch-anim2 {
+  0% { clip: rect(65px, 9999px, 100px, 0); }
+  20% { clip: rect(25px, 9999px, 30px, 0); }
+  40% { clip: rect(75px, 9999px, 80px, 0); }
+  60% { clip: rect(15px, 9999px, 20px, 0); }
+  80% { clip: rect(45px, 9999px, 50px, 0); }
+  100% { clip: rect(5px, 9999px, 10px, 0); }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-cyber-bg;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-cyber-red/20 rounded-full hover:bg-cyber-red/40 transition-colors;
+}

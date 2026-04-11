@@ -229,8 +229,10 @@ const Hero = () => {
           </span>
           <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight">
             I analyze threats to <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyber-red via-red-500 to-cyber-red glitch" data-text="Secure the Perimeter.">
-              Secure the Perimeter.
+            <span className="glitch" data-text="Secure the Perimeter">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyber-red via-red-500 to-cyber-red">
+                Secure the Perimeter
+              </span>
             </span>
           </h1>
           

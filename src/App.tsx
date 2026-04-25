@@ -4,18 +4,18 @@ import { BrowserRouter, Routes, Route, Link, useParams, useNavigate, useLocation
 import ReactMarkdown from 'react-markdown';
 import emailjs from '@emailjs/browser';
 import { Toaster, toast } from 'react-hot-toast';
-import { 
-  Terminal, 
-  Shield, 
-  Network, 
-  Cpu, 
-  Code, 
-  Search, 
-  Lock, 
-  Github, 
-  Linkedin, 
-  Mail, 
-  ExternalLink, 
+import {
+  Terminal,
+  Shield,
+  Network,
+  Cpu,
+  Code,
+  Search,
+  Lock,
+  Github,
+  Linkedin,
+  Mail,
+  ExternalLink,
   ChevronRight,
   Menu,
   X,
@@ -34,20 +34,24 @@ import {
   Tag
 } from 'lucide-react';
 
-// --- Blog Data Management ---
-// This uses Vite's glob import to find all markdown files in the /src/blogs directory
+const DiscordIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+    <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z" />
+  </svg>
+);
+
 const blogFiles = (import.meta as any).glob('./blogs/*.md', { query: '?raw', eager: true });
 
 const parseFrontmatter = (content: any) => {
   if (typeof content !== 'string') return { data: {}, content: '' };
   const frontmatterRegex = /^---\s*([\s\S]*?)\s*---/;
   const match = content.match(frontmatterRegex);
-  
+
   if (!match) return { data: {}, content };
-  
+
   const yamlBlock = match[1];
   const markdownContent = content.replace(frontmatterRegex, '').trim();
-  
+
   const data: any = {};
   yamlBlock.split('\n').forEach(line => {
     const [key, ...valueParts] = line.split(':');
@@ -60,7 +64,7 @@ const parseFrontmatter = (content: any) => {
       }
     }
   });
-  
+
   return { data, content: markdownContent };
 };
 
@@ -94,17 +98,14 @@ const Navbar = ({ isHome = true }: { isHome?: boolean }) => {
 
   const navLinks = [
     { name: 'About', href: isHome ? '#about' : '/#about' },
-    { name: 'Skills', href: isHome ? '#skills' : '/#skills' },
-    { name: 'Projects', href: isHome ? '#projects' : '/#projects' },
     { name: 'Blogs', href: isHome ? '#blogs' : '/blogs' },
     { name: 'Journey', href: isHome ? '#journey' : '/#journey' },
-    { name: 'Contact', href: isHome ? '#contact' : '/#contact' },
   ];
 
   return (
     <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled || !isHome ? 'bg-cyber-bg/90 backdrop-blur-lg border-b border-cyber-red/20 py-4' : 'bg-transparent py-6'}`}>
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-        <motion.div 
+        <motion.div
           whileHover={{ scale: 1.05 }}
         >
           <Link to="/" className="text-white font-mono font-bold text-xl flex items-center gap-2 group">
@@ -117,9 +118,9 @@ const Navbar = ({ isHome = true }: { isHome?: boolean }) => {
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             link.href.startsWith('#') ? (
-              <a 
-                key={link.name} 
-                href={link.href} 
+              <a
+                key={link.name}
+                href={link.href}
                 className="text-xs font-mono text-slate-400 hover:text-cyber-red transition-colors uppercase tracking-[0.2em]"
               >
                 {link.name}
@@ -134,8 +135,8 @@ const Navbar = ({ isHome = true }: { isHome?: boolean }) => {
               </Link>
             )
           ))}
-          <motion.a 
-            href="#contact"
+          <motion.a
+            href="#footer"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="px-5 py-2 bg-cyber-red/10 border border-cyber-red/50 text-cyber-red text-xs font-mono uppercase tracking-widest rounded-sm hover:bg-cyber-red hover:text-black transition-all"
@@ -153,7 +154,7 @@ const Navbar = ({ isHome = true }: { isHome?: boolean }) => {
       {/* Mobile Nav */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
@@ -162,9 +163,9 @@ const Navbar = ({ isHome = true }: { isHome?: boolean }) => {
             <div className="flex flex-col p-6 gap-4">
               {navLinks.map((link) => (
                 link.href.startsWith('#') ? (
-                  <a 
-                    key={link.name} 
-                    href={link.href} 
+                  <a
+                    key={link.name}
+                    href={link.href}
                     onClick={() => setIsOpen(false)}
                     className="text-lg font-mono text-slate-400 hover:text-cyber-red transition-colors"
                   >
@@ -193,7 +194,7 @@ const Navbar = ({ isHome = true }: { isHome?: boolean }) => {
 const Hero = () => {
   const [text, setText] = useState('');
   const fullText = "SOC Analyst in Training | Malware Analysis Enthusiast";
-  
+
   useEffect(() => {
     let i = 0;
     const timer = setInterval(() => {
@@ -207,16 +208,16 @@ const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
       {/* Background Grid */}
-      <div className="absolute inset-0 z-0 opacity-10" 
-        style={{ 
-          backgroundImage: 'radial-gradient(circle at 2px 2px, #ff0000 1px, transparent 0)',
+      <div className="absolute inset-0 z-0 opacity-10"
+        style={{
+          backgroundImage: 'radial-gradient(circle at 2px 2px, var(--color-cyber-red) 1px, transparent 0)',
           backgroundSize: '40px 40px'
-        }} 
+        }}
       />
-      
-      {/* Animated Glows */}
-      <div className="absolute top-1/4 -left-20 w-96 h-96 bg-cyber-red/10 rounded-full blur-[120px] animate-pulse" />
-      <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-cyber-red/5 rounded-full blur-[120px] animate-pulse delay-1000" />
+
+      {/* Static Glows */}
+      <div className="absolute top-1/4 -left-20 w-96 h-96 bg-cyber-red/10 rounded-full blur-[120px]" />
+      <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-cyber-red/5 rounded-full blur-[120px]" />
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
         <motion.div
@@ -235,7 +236,7 @@ const Hero = () => {
               </span>
             </span>
           </h1>
-          
+
           <div className="min-h-[2rem] mb-8">
             <p className="text-lg md:text-2xl font-mono text-slate-400">
               {text}<span className="animate-pulse text-cyber-red">_</span>
@@ -243,22 +244,24 @@ const Hero = () => {
           </div>
 
           <p className="max-w-2xl mx-auto text-slate-400 mb-12 text-base md:text-lg leading-relaxed">
-            Focused on SOC operations and deep-dive malware analysis. 
+            Focused on SOC operations and deep-dive malware analysis.
             Developing a keen eye for indicators of compromise and adversary tactics.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <motion.a 
-              href="#projects"
+            <motion.a
+              href="https://github.com/88BahaaAdel88"
+              target="_blank"
+              rel="noreferrer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 bg-cyber-red text-black font-mono font-bold uppercase tracking-widest rounded-sm flex items-center gap-2 group shadow-[0_0_20px_rgba(255,0,0,0.3)]"
+              className="px-8 py-4 bg-cyber-red text-white font-mono font-bold uppercase tracking-widest rounded-sm flex items-center gap-2 group shadow-sm hover:shadow-md hover:shadow-cyber-red/20 transition-all"
             >
               View My Work
               <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </motion.a>
-            <motion.a 
-              href="#contact"
+            <motion.a
+              href="#footer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="px-8 py-4 border border-cyber-red/30 text-white font-mono uppercase tracking-widest rounded-sm hover:bg-cyber-red/5 transition-all"
@@ -289,15 +292,15 @@ const About = () => {
             </h2>
             <div className="space-y-6 text-slate-400 text-lg leading-relaxed">
               <p>
-                Hello! I'm <span className="text-white font-medium">B4HAA7</span>, a cybersecurity enthusiast from <span className="text-white font-medium">Egypt</span>. 
+                Hello! I'm <span className="text-white font-medium">B4HAA7</span>, a cybersecurity enthusiast from <span className="text-white font-medium">Egypt</span>.
                 My transition into security was driven by a fascination with the "why" behind system behaviors.
               </p>
               <p>
-                Currently, I am immersing myself in <span className="text-cyber-red font-medium">SOC Operations</span> and <span className="text-cyber-red font-medium">Malware Analysis</span>. 
+                Currently, I am immersing myself in <span className="text-cyber-red font-medium">SOC Operations</span> and <span className="text-cyber-red font-medium">Malware Analysis</span>.
                 I enjoy the detective work of hunting for threats and dissecting malicious code to understand its intent.
               </p>
               <p>
-                I'm a dedicated <span className="text-white font-medium">Arch Linux</span> user, which provides the perfect environment for my technical experiments. 
+                I'm a dedicated <span className="text-white font-medium">Arch Linux</span> user, which provides the perfect environment for my technical experiments.
                 When I'm not monitoring logs or analyzing samples, I'm likely solving CTF challenges or refining my networking knowledge.
               </p>
               <div className="flex flex-wrap gap-4 pt-4">
@@ -314,7 +317,7 @@ const About = () => {
             </div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
@@ -335,142 +338,12 @@ const About = () => {
                   <div className="text-[10px] font-mono uppercase text-slate-500">Operations</div>
                 </div>
                 <div className="p-4 bg-white/5 rounded-sm border border-white/5">
-                  <div className="text-2xl font-bold text-white">RE</div>
-                  <div className="text-[10px] font-mono uppercase text-slate-500">Malware</div>
+                  <div className="text-2xl font-bold text-white">MA</div>
+                  <div className="text-[10px] font-mono uppercase text-slate-500">Malware Analyst</div>
                 </div>
               </div>
             </div>
           </motion.div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const Skills = () => {
-  const skills = [
-    { name: 'SOC Operations', icon: <Activity />, color: 'text-cyber-red' },
-    { name: 'Malware Analysis', icon: <Bug />, color: 'text-cyber-red' },
-    { name: 'Networking', icon: <Network />, color: 'text-cyber-red' },
-    { name: 'Linux (Arch)', icon: <Terminal />, color: 'text-cyber-red' },
-    { name: 'Python', icon: <Code />, color: 'text-cyber-red' },
-    { name: 'Traffic Analysis', icon: <Search />, color: 'text-cyber-red' },
-    { name: 'CTF Solving', icon: <Flag />, color: 'text-cyber-red' },
-    { name: 'TH18 (CoC)', icon: <Swords />, color: 'text-cyber-red' },
-  ];
-
-  return (
-    <section id="skills" className="py-24">
-      <div className="max-w-7xl mx-auto px-6">
-        <h2 className="text-3xl md:text-4xl font-bold mb-16 flex items-center gap-4">
-          <span className="text-cyber-red">02.</span> Technical Arsenal
-          <div className="h-[1px] flex-grow bg-cyber-red/10 ml-4" />
-        </h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {skills.map((skill, index) => (
-            <motion.div
-              key={skill.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ y: -5, borderColor: 'rgba(255,0,0,0.3)' }}
-              className="glass p-6 rounded-sm group border-white/5 transition-all"
-            >
-              <div className={`w-12 h-12 rounded-sm bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform ${skill.color}`}>
-                <span className="w-6 h-6 flex items-center justify-center">
-                  {skill.icon}
-                </span>
-              </div>
-              <h3 className="text-lg font-bold mb-2">{skill.name}</h3>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const Projects = () => {
-  const projects = [
-    {
-      title: "Malware Sandbox Analysis",
-      desc: "Detailed behavioral analysis of recent ransomware samples in a controlled sandbox environment. Documented API calls and network callbacks.",
-      tech: ["Any.Run", "Wireshark", "RE"],
-      icon: <Bug className="w-10 h-10" />
-    },
-    {
-      title: "SOC Dashboard Simulation",
-      desc: "Built a mock SOC dashboard to visualize alert data and practice incident response workflows for common attack scenarios.",
-      tech: ["ELK Stack", "Sysmon", "SOC"],
-      icon: <Activity className="w-10 h-10" />
-    },
-    {
-      title: "Network Intrusion Lab",
-      desc: "Configured Snort and Suricata to detect lateral movement and data exfiltration patterns in a simulated enterprise network.",
-      tech: ["Snort", "Suricata", "IDS"],
-      icon: <Shield className="w-10 h-10" />
-    },
-    {
-      title: "Packet Analysis Case Study",
-      desc: "Deep-dive analysis of a simulated data breach, tracing the attacker's steps from initial compromise to exfiltration.",
-      tech: ["Wireshark", "Network Forensics"],
-      icon: <Search className="w-10 h-10" />
-    }
-  ];
-
-  return (
-    <section id="projects" className="py-24 bg-cyber-card/30 border-y border-white/5">
-      <div className="max-w-7xl mx-auto px-6">
-        <h2 className="text-3xl md:text-4xl font-bold mb-16 flex items-center gap-4">
-          <span className="text-cyber-red">03.</span> Featured Labs
-          <div className="h-[1px] flex-grow bg-cyber-red/10 ml-4" />
-        </h2>
-
-        <div className="grid md:grid-cols-2 gap-8">
-          {projects.map((project, index) => (
-            <motion.div
-              key={project.title}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="group relative overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-cyber-red/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="glass p-8 rounded-sm border-white/5 hover:border-cyber-red/30 transition-all relative z-10">
-                <div className="flex justify-between items-start mb-6">
-                  <div className="text-cyber-red opacity-50 group-hover:opacity-100 transition-opacity">
-                    {project.icon}
-                  </div>
-                  <div className="flex gap-4">
-                    <Github className="w-5 h-5 text-slate-500 hover:text-white cursor-pointer transition-colors" />
-                    <ExternalLink className="w-5 h-5 text-slate-500 hover:text-white cursor-pointer transition-colors" />
-                  </div>
-                </div>
-                <h3 className="text-2xl font-bold mb-4 group-hover:text-cyber-red transition-colors">
-                  {project.title}
-                </h3>
-                <p className="text-slate-400 mb-8 leading-relaxed">
-                  {project.desc}
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  {project.tech.map(t => (
-                    <span key={t} className="text-[10px] font-mono px-2 py-1 bg-white/5 text-slate-400 rounded-sm border border-white/5">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-                <motion.button 
-                  whileHover={{ x: 5 }}
-                  className="mt-8 flex items-center gap-2 text-xs font-mono text-cyber-red uppercase tracking-widest"
-                >
-                  View Details <ArrowUpRight className="w-3 h-3" />
-                </motion.button>
-              </div>
-            </motion.div>
-          ))}
         </div>
       </div>
     </section>
@@ -485,11 +358,11 @@ const Blogs = () => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex justify-between items-end mb-16">
           <h2 className="text-3xl md:text-4xl font-bold flex items-center gap-4">
-            <span className="text-cyber-red">04.</span> Blogs & Writeups
+            <span className="text-cyber-red">02.</span> Blogs & Writeups
             <div className="h-[1px] w-32 bg-cyber-red/10 ml-4 hidden sm:block" />
           </h2>
-          <Link 
-            to="/blogs" 
+          <Link
+            to="/blogs"
             className="text-xs font-mono text-cyber-red uppercase tracking-widest flex items-center gap-2 hover:translate-x-1 transition-transform"
           >
             View All <ChevronRight className="w-3 h-3" />
@@ -551,13 +424,13 @@ const Journey = () => {
     <section id="journey" className="py-24 bg-cyber-card/30 border-y border-white/5">
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="text-3xl md:text-4xl font-bold mb-16 flex items-center gap-4">
-          <span className="text-cyber-red">05.</span> Learning Path
+          <span className="text-cyber-red">03.</span> Learning Path
           <div className="h-[1px] flex-grow bg-cyber-red/10 ml-4" />
         </h2>
 
         <div className="relative">
           <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-[1px] bg-cyber-red/20 -translate-x-1/2 hidden md:block" />
-          
+
           <div className="space-y-12">
             {steps.map((step, index) => (
               <motion.div
@@ -569,7 +442,7 @@ const Journey = () => {
                 className={`relative flex flex-col md:flex-row items-center ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}
               >
                 <div className="absolute left-0 md:left-1/2 w-4 h-4 bg-cyber-red rounded-full -translate-x-1/2 z-10 glow-red hidden md:block" />
-                
+
                 <div className="w-full md:w-1/2 px-0 md:px-12">
                   <div className={`glass p-6 rounded-sm border-white/5 hover:border-cyber-red/20 transition-all ${index % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
                     <span className="text-cyber-red font-mono text-sm mb-2 block">{step.year}</span>
@@ -587,203 +460,30 @@ const Journey = () => {
   );
 };
 
-const Contact = () => {
-  const formRef = useRef<HTMLFormElement>(null);
-  const [isSending, setIsSending] = useState(false);
-
-  const sendEmail = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formRef.current) return;
-
-    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-
-    if (!serviceId || !templateId || !publicKey) {
-      toast.error('Email service not configured. Please check environment variables.', {
-        style: {
-          background: '#1a1a1a',
-          color: '#fff',
-          border: '1px solid rgba(255,0,0,0.2)',
-          fontFamily: 'monospace'
-        }
-      });
-      return;
-    }
-
-    setIsSending(true);
-    const loadingToast = toast.loading('Sending transmission...', {
-      style: {
-        background: '#1a1a1a',
-        color: '#fff',
-        border: '1px solid rgba(255,0,0,0.2)',
-        fontFamily: 'monospace'
-      }
-    });
-
-    try {
-      await emailjs.sendForm(
-        serviceId,
-        templateId,
-        formRef.current,
-        publicKey
-      );
-      
-      toast.success('Transmission received. I will get back to you soon.', {
-        id: loadingToast,
-        style: {
-          background: '#1a1a1a',
-          color: '#fff',
-          border: '1px solid rgba(0,255,0,0.2)',
-          fontFamily: 'monospace'
-        }
-      });
-      formRef.current.reset();
-    } catch (error) {
-      console.error('Email error:', error);
-      toast.error('Transmission failed. Please try again or use direct email.', {
-        id: loadingToast,
-        style: {
-          background: '#1a1a1a',
-          color: '#fff',
-          border: '1px solid rgba(255,0,0,0.2)',
-          fontFamily: 'monospace'
-        }
-      });
-    } finally {
-      setIsSending(false);
-    }
-  };
-
-  return (
-    <section id="contact" className="py-24">
-      <div className="max-w-7xl mx-auto px-6">
-        <h2 className="text-3xl md:text-4xl font-bold mb-16 flex items-center gap-4">
-          <span className="text-cyber-red">06.</span> Get In Touch
-          <div className="h-[1px] flex-grow bg-cyber-red/10 ml-4" />
-        </h2>
-
-        <div className="grid lg:grid-cols-2 gap-16">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
-            <h3 className="text-2xl font-bold mb-6">Let's Connect</h3>
-            <p className="text-slate-400 mb-10 text-lg leading-relaxed">
-              I'm always open to discussing security research, SOC operations, or just chatting about Arch Linux. 
-              Feel free to reach out via any of the platforms below.
-            </p>
-
-            <div className="space-y-6">
-              <a href="mailto:bahaaadel47880@gmail.com" className="flex items-center gap-4 group">
-                <div className="w-12 h-12 glass rounded-sm flex items-center justify-center group-hover:text-cyber-red transition-colors">
-                  <Mail className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-[10px] font-mono uppercase text-slate-500">Email</div>
-                  <div className="text-white font-mono">bahaaadel47880@gmail.com</div>
-                </div>
-              </a>
-              <a href="#" className="flex items-center gap-4 group">
-                <div className="w-12 h-12 glass rounded-sm flex items-center justify-center group-hover:text-cyber-red transition-colors">
-                  <Github className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-[10px] font-mono uppercase text-slate-500">GitHub</div>
-                  <div className="text-white font-mono">github.com/B4HAA7</div>
-                </div>
-              </a>
-              <a href="#" className="flex items-center gap-4 group">
-                <div className="w-12 h-12 glass rounded-sm flex items-center justify-center group-hover:text-cyber-red transition-colors">
-                  <MessageSquare className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-[10px] font-mono uppercase text-slate-500">Discord</div>
-                  <div className="text-white font-mono">ienjoycaffeine</div>
-                </div>
-              </a>
-              <a href="https://www.linkedin.com/in/b4haa7/" target="_blank" className="flex items-center gap-4 group">
-                <div className="w-12 h-12 glass rounded-sm flex items-center justify-center group-hover:text-cyber-red transition-colors">
-                  <Linkedin className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-[10px] font-mono uppercase text-slate-500">LinkedIn</div>
-                  <div className="text-white font-mono">Bahaa Adel</div>
-                </div>
-              </a>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="glass p-8 rounded-sm border-white/10"
-          >
-            <form ref={formRef} className="space-y-6" onSubmit={sendEmail}>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-mono uppercase text-slate-500 tracking-widest">Name</label>
-                  <input 
-                    type="text" 
-                    name="user_name"
-                    required
-                    className="w-full bg-white/5 border border-white/10 rounded-sm px-4 py-3 text-white focus:outline-none focus:border-cyber-red transition-colors"
-                    placeholder="Elliot Alderson"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-mono uppercase text-slate-500 tracking-widest">Email</label>
-                  <input 
-                    type="email" 
-                    name="user_email"
-                    required
-                    className="w-full bg-white/5 border border-white/10 rounded-sm px-4 py-3 text-white focus:outline-none focus:border-cyber-red transition-colors"
-                    placeholder="elliot@allsafe.com"
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <label className="text-[10px] font-mono uppercase text-slate-500 tracking-widest">Message</label>
-                <textarea 
-                  name="message"
-                  rows={5}
-                  required
-                  className="w-full bg-white/5 border border-white/10 rounded-sm px-4 py-3 text-white focus:outline-none focus:border-cyber-red transition-colors resize-none"
-                  placeholder="Hello friend..."
-                />
-              </div>
-              <motion.button
-                type="submit"
-                disabled={isSending}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className={`w-full py-4 bg-cyber-red text-black font-mono font-bold uppercase tracking-widest rounded-sm hover:glow-red transition-all ${isSending ? 'opacity-50 cursor-not-allowed' : ''}`}
-              >
-                {isSending ? 'Sending...' : 'Send Transmission'}
-              </motion.button>
-            </form>
-          </motion.div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
 const Footer = () => {
   return (
-    <footer className="py-12 border-t border-white/5">
+    <footer id="footer" className="py-12 border-t border-white/5">
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="text-slate-500 text-xs font-mono">
           © {new Date().getFullYear()} B4HAA7. ALL TRANSMISSIONS ENCRYPTED.
         </div>
         <div className="flex items-center gap-6">
-          <span className="text-slate-500 text-[10px] font-mono uppercase tracking-widest">fsociety.exe</span>
           <div className="flex gap-4">
-            <Github className="w-4 h-4 text-slate-500 hover:text-cyber-red transition-colors cursor-pointer" />
-            <MessageSquare className="w-4 h-4 text-slate-500 hover:text-cyber-red transition-colors cursor-pointer" />
-            <Mail className="w-4 h-4 text-slate-500 hover:text-cyber-red transition-colors cursor-pointer" />
+            <a href="mailto:bahaaadel47880@outlook.com" aria-label="Email">
+              <Mail className="w-5 h-5 text-slate-500 hover:text-cyber-red transition-colors cursor-pointer" />
+            </a>
+            <a href="https://github.com/88BahaaAdel88" target="_blank" rel="noreferrer" aria-label="GitHub">
+              <Github className="w-5 h-5 text-slate-500 hover:text-cyber-red transition-colors cursor-pointer" />
+            </a>
+            <a href="https://discord.com/users/ienjoycaffeine" target="_blank" rel="noreferrer" aria-label="Discord">
+              <DiscordIcon className="w-5 h-5 text-slate-500 hover:text-cyber-red transition-colors cursor-pointer" />
+            </a>
+            <a href="https://www.linkedin.com/in/b4haa7/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
+              <Linkedin className="w-5 h-5 text-slate-500 hover:text-cyber-red transition-colors cursor-pointer" />
+            </a>
+            <a href="https://link.clashofclans.com/en?action=OpenPlayerProfile&tag=8L29JGCJ2" target="_blank" rel="noreferrer" aria-label="Clash of Clans">
+              <Swords className="w-5 h-5 text-slate-500 hover:text-cyber-red transition-colors cursor-pointer" />
+            </a>
           </div>
         </div>
       </div>
@@ -800,7 +500,7 @@ const ScrollProgress = () => {
   });
 
   return (
-    <motion.div 
+    <motion.div
       className="fixed top-0 left-0 right-0 h-1 bg-cyber-red z-[60] origin-left"
       style={{ scaleX }}
     />
@@ -812,11 +512,8 @@ const Home = () => {
     <>
       <Hero />
       <About />
-      <Skills />
-      <Projects />
       <Blogs />
       <Journey />
-      <Contact />
     </>
   );
 };

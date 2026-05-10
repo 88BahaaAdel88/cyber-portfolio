@@ -116,7 +116,7 @@ const Navbar = ({ isHome = true }: { isHome?: boolean }) => {
         <motion.div
           whileHover={{ scale: 1.05 }}
         >
-          <Link to="/" className="text-white font-mono font-bold text-xl flex items-center gap-2 group">
+          <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-white font-mono font-bold text-xl flex items-center gap-2 group">
             <Terminal className="text-cyber-red w-6 h-6 group-hover:animate-pulse" />
             <span className="glitch" data-text="B4HAA7">B4HAA7</span>
           </Link>
@@ -154,10 +154,21 @@ const Navbar = ({ isHome = true }: { isHome?: boolean }) => {
           </motion.a>
         </div>
 
-        {/* Mobile Toggle */}
-        <button className="md:hidden text-white" onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <X /> : <Menu />}
-        </button>
+        {/* Mobile Controls */}
+        <div className="md:hidden flex items-center gap-4">
+          <motion.a
+            href="#footer"
+            onClick={() => window.dispatchEvent(new Event('glowFooter'))}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-3 py-1.5 bg-cyber-red/10 border border-cyber-red/50 text-cyber-red text-[10px] font-mono uppercase tracking-widest rounded-sm hover:bg-cyber-red hover:text-black transition-all"
+          >
+            Connect
+          </motion.a>
+          <button className="text-white" onClick={() => setIsOpen(!isOpen)}>
+            {isOpen ? <X /> : <Menu />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Nav */}
@@ -474,7 +485,7 @@ const Footer = () => {
     return () => window.removeEventListener('glowFooter', handleGlow as EventListener);
   }, []);
 
-  const glowClass = isGlowing ? 'text-cyber-red animate-pulse drop-shadow-[0_0_8px_rgba(255,23,68,0.8)]' : 'text-slate-500';
+  const glowClass = isGlowing ? 'text-cyber-red animate-pulse scale-125' : 'text-slate-500';
 
   return (
     <footer id="footer" className="py-12 border-t border-white/5">

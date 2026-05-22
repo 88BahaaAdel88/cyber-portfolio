@@ -246,7 +246,7 @@ const Hero = () => {
           transition={{ duration: 0.8 }}
         >
           <span className="inline-block px-3 py-1 bg-cyber-red/10 border border-cyber-red/30 text-cyber-red text-[10px] font-mono uppercase tracking-[0.3em] mb-8 rounded-full">
-            Status: Alert & Learning
+            Status: under construction
           </span>
           <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight">
             I analyze threats to <br />

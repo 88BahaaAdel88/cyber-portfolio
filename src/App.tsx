@@ -211,6 +211,53 @@ const Navbar = ({ isHome = true }: { isHome?: boolean }) => {
 };
 
 
+const LabStatusTicker = () => {
+  const statuses = [
+    "Alert & Analyzing",
+    "Caffeinated",
+    ";)",
+    "Preparing for CompTIA CySA+",
+    "Doing THM SOC L2 Path",
+    "LONG ASS TEXT sjdaflksjdfklajsdfl;kajsdfl;kjasd;lfkjasdl;fkjasd;lfkj"
+  ];
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % statuses.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [statuses.length]);
+
+  return (
+    <motion.div
+      layout
+      transition={{ type: "spring", stiffness: 350, damping: 30 }}
+      className="inline-flex items-center gap-2.5 px-4 py-1.5 bg-cyber-red/5 border border-cyber-red/20 text-[10px] font-mono uppercase tracking-[0.2em] mb-8 rounded-full shadow-[0_0_15px_rgba(255,23,68,0.03)]"
+    >
+      <span className="relative flex h-2 w-2">
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyber-red opacity-75"></span>
+        <span className="relative inline-flex rounded-full h-2 w-2 bg-cyber-red"></span>
+      </span>
+      <span className="text-slate-400 font-bold whitespace-nowrap">Status:</span>
+      <div className="h-4 overflow-hidden relative flex items-center">
+        <AnimatePresence mode="wait">
+          <motion.span
+            key={index}
+            initial={{ y: 8, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -8, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="whitespace-nowrap text-cyber-red font-semibold text-glow inline-block"
+          >
+            {statuses[index]}
+          </motion.span>
+        </AnimatePresence>
+      </div>
+    </motion.div>
+  );
+};
+
 const Hero = () => {
   const [text, setText] = useState('');
   const fullText = "SOC Analyst in Training | Malware Analysis Enthusiast";
@@ -245,9 +292,7 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <span className="inline-block px-3 py-1 bg-cyber-red/10 border border-cyber-red/30 text-cyber-red text-[10px] font-mono uppercase tracking-[0.3em] mb-8 rounded-full">
-            Status: under construction
-          </span>
+          <LabStatusTicker />
           <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight">
             I analyze threats to <br />
             <span className="glitch" data-text="Secure the Perimeter">
@@ -306,25 +351,22 @@ const About = () => {
             <div className="space-y-6 text-slate-400 text-lg leading-relaxed">
               <p>
                 Hello! I'm <span className="text-white font-medium">Bahaa</span>, a cybersecurity enthusiast from <span className="text-white font-medium">Egypt</span>.
-                My transition into security was driven by a fascination with the "why" behind system behaviors.
+                My transition into security was driven by a fascination with the "why" behind system behaviors, and a little bit of digital paranoia.
               </p>
               <p>
                 Currently, I am immersing myself in <span className="text-cyber-red font-medium">SOC Operations</span> and <span className="text-cyber-red font-medium">Malware Analysis</span>.
                 I enjoy the detective work of hunting for threats and dissecting malicious code to understand its intent.
-              </p>
-              <p>
-                I'm a dedicated <span className="text-white font-medium">Arch Linux</span> user, which provides the perfect environment for my technical experiments.
-                When I'm not monitoring logs or analyzing samples, I'm likely solving CTF challenges or refining my networking knowledge.
+                <br /> When I'm not monitoring logs or analyzing samples, I'm likely doing <span className="text-cyber-red font-medium">TryHackMe</span> Rooms or refining my networking knowledge.
               </p>
               <div className="flex flex-wrap gap-4 pt-4">
                 <div className="flex items-center gap-2 text-sm font-mono text-cyber-red">
                   <ChevronRight className="w-4 h-4" /> Arch Linux User
                 </div>
                 <div className="flex items-center gap-2 text-sm font-mono text-cyber-red">
-                  <ChevronRight className="w-4 h-4" /> SOC Analyst Trainee
+                  <ChevronRight className="w-4 h-4" /> Fitness
                 </div>
                 <div className="flex items-center gap-2 text-sm font-mono text-cyber-red">
-                  <ChevronRight className="w-4 h-4" /> Malware Researcher
+                  <ChevronRight className="w-4 h-4" /> Avid Reader
                 </div>
               </div>
             </div>
@@ -343,8 +385,9 @@ const About = () => {
               </div>
               <h3 className="text-2xl font-bold mb-4">Defense Strategy</h3>
               <p className="text-slate-400 italic">
-                "To defend a kingdom, you must first know the mind of the invader. Security is the art of anticipating the unseen."
+                "The art of living is more like wrestling than dancing, in so far as it stands ready against the accidental and the unforeseen, and is not apt to fall."
               </p>
+              <span className="text-[10px] font-mono text-cyber-red mt-2 block">— Marcus Aurelius, Meditations</span>
               <div className="mt-8 grid grid-cols-2 gap-4 w-full">
                 <div className="p-4 bg-white/5 rounded-sm border border-white/5">
                   <div className="text-2xl font-bold text-white">SOC</div>
@@ -358,8 +401,8 @@ const About = () => {
             </div>
           </motion.div>
         </div>
-      </div>
-    </section>
+      </div >
+    </section >
   );
 };
 
@@ -412,24 +455,24 @@ const Blogs = () => {
 const Journey = () => {
   const steps = [
     {
-      year: "2023",
-      title: "The Genesis",
-      desc: "Started learning networking fundamentals and Linux basics. Installed Arch Linux for the first time."
+      year: "2019 - 2022",
+      title: "Initial Access",
+      desc: "Installed Ubuntu for the first time, exploring Linux system administration basics and foundational programming concepts in C and Python."
     },
     {
-      year: "2024",
-      title: "Security Deep Dive",
-      desc: "Began studying cybersecurity concepts, OWASP Top 10, and network security protocols."
+      year: "2023 - 2024",
+      title: "Red Team Recon",
+      desc: "Fascinated by offensive security, I completed my first structured cybersecurity roadmap on roadmap.sh and dived into Kali Linux and web penetration testing methodologies."
     },
     {
       year: "2025",
-      title: "SOC & Malware Focus",
-      desc: "Pivoted focus to SOC operations and Malware analysis. Building specialized labs for threat hunting."
+      title: "Blue Team Operations",
+      desc: "Pivoted to defensive operations, actively training in SOC analysis and blue teaming via TryHackMe. Deployed my first physical homelab, configuring and monitoring active SIEM systems."
     },
     {
       year: "Present",
-      title: "Continuous Growth",
-      desc: "Improving technical skills daily, contributing to open source, and preparing for professional certifications."
+      title: "Continuous Evolution",
+      desc: "Sharpening defensive capabilities daily and preparing for professional security certifications like CompTIA CySA+."
     }
   ];
 
